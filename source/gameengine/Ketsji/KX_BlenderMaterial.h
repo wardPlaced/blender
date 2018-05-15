@@ -45,8 +45,7 @@ public:
 	virtual Material *GetBlenderMaterial() const;
 	virtual bool UsesLighting() const;
 	virtual void GetRGBAColor(unsigned char *rgba) const;
-	virtual Scene *GetBlenderScene() const;
-	virtual SCA_IScene *GetScene() const;
+	KX_Scene *GetScene() const;
 	virtual void ReloadMaterial();
 
 	/** Set scene owning this material and generate blender shader using

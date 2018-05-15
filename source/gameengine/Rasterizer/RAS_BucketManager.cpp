@@ -386,7 +386,7 @@ void RAS_BucketManager::RemoveMaterial(RAS_IPolyMaterial *mat)
 	}
 }
 
-void RAS_BucketManager::MergeBucketManager(RAS_BucketManager *other, SCA_IScene *scene)
+void RAS_BucketManager::MergeBucketManager(RAS_BucketManager *other)
 {
 	for (unsigned short i = 0; i < NUM_BUCKET_TYPE; ++i) {
 		BucketList& buckets = m_buckets[i];

@@ -54,7 +54,6 @@ class RAS_OffScreen;
 class RAS_MeshSlot;
 class RAS_IDisplayArray;
 class RAS_ILightObject;
-class SCA_IScene;
 class RAS_ISync;
 struct KX_ClientObjectInfo;
 class KX_RayCast;
@@ -284,7 +283,7 @@ private:
 	};
 
 	// We store each debug shape by scene.
-	std::map<SCA_IScene *, RAS_DebugDraw> m_debugDraws;
+	std::map<void *, RAS_DebugDraw> m_debugDraws;
 
 	double m_time;
 	mt::vec3 m_ambient;
@@ -630,8 +629,8 @@ public:
 	 */
 	void SetPolygonOffset(DrawType drawingMode, float mult, float add);
 
-	RAS_DebugDraw& GetDebugDraw(SCA_IScene *scene);
-	void FlushDebugDraw(SCA_IScene *scene, RAS_ICanvas *canvas);
+	RAS_DebugDraw& GetDebugDraw(void *scene);
+	void FlushDebugDraw(void *scene, RAS_ICanvas *canvas);
 
 	const mt::mat4 &GetViewMatrix() const;
 	const mt::mat4 &GetViewInvMatrix() const;

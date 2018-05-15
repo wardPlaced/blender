@@ -32,10 +32,6 @@
 #ifndef __KX_SOFTBODYDEFORMER_H__
 #define __KX_SOFTBODYDEFORMER_H__
 
-#ifdef _MSC_VER
-#  pragma warning (disable:4786)  /* get rid of stupid stl-visual compiler debug warning */
-#endif
-
 #include "RAS_Deformer.h"
 #include "BL_DeformableGameObject.h"
 #include <vector>
@@ -54,7 +50,7 @@ public:
 	KX_SoftBodyDeformer(RAS_Mesh *pMeshObject, BL_DeformableGameObject *gameobj);
 	virtual ~KX_SoftBodyDeformer();
 
-	virtual void Relink(std::map<SCA_IObject *, SCA_IObject *>& map);
+	virtual void Relink(std::map<KX_GameObject *, KX_GameObject *>& map);
 	virtual void Apply(RAS_IDisplayArray *array);
 	virtual bool Update()
 	{

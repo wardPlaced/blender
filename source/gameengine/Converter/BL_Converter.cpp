@@ -47,7 +47,6 @@
 #include "BL_SceneConverter.h"
 #include "BL_BlenderDataConversion.h"
 #include "BL_ConvertObjectInfo.h"
-#include "BL_ActionActuator.h"
 #include "KX_BlenderMaterial.h"
 
 #include "LA_SystemCommandLine.h"
@@ -483,7 +482,7 @@ KX_LibLoadStatus *BL_Converter::LinkBlendFile(BlendHandle *blendlib, const char 
 				CM_Debug("mesh name: " << mesh->name + 2);
 			}
 			KX_Mesh *meshobj = BL_ConvertMesh((Mesh *)mesh, nullptr, scene_merge, sceneConverter);
-			scene_merge->GetLogicManager()->RegisterMeshName(meshobj->GetName(), meshobj);
+// 			scene_merge->GetLogicManager()->RegisterMeshName(meshobj->GetName(), meshobj); TODO
 		}
 
 		// Finalize material and mesh conversion.
@@ -498,7 +497,7 @@ KX_LibLoadStatus *BL_Converter::LinkBlendFile(BlendHandle *blendlib, const char 
 			if (options & LIB_LOAD_VERBOSE) {
 				CM_Debug("action name: " << action->name + 2);
 			}
-			scene_merge->GetLogicManager()->RegisterActionName(action->name + 2, action);
+// 			scene_merge->GetLogicManager()->RegisterActionName(action->name + 2, action); TODO
 		}
 	}
 	else if (idcode == ID_SCE) {
@@ -554,7 +553,7 @@ KX_LibLoadStatus *BL_Converter::LinkBlendFile(BlendHandle *blendlib, const char 
 				if (options & LIB_LOAD_VERBOSE) {
 					CM_Debug("action name: " << action->name + 2);
 				}
-				scene_merge->GetLogicManager()->RegisterActionName(action->name + 2, action);
+// 				scene_merge->GetLogicManager()->RegisterActionName(action->name + 2, action); TODO
 			}
 		}
 	}
@@ -614,7 +613,7 @@ bool BL_Converter::FreeBlendFile(Main *maggie)
 		}
 		else {
 			// in case the mesh might be refered to later
-			std::map<std::string, void *> &mapStringToMeshes = scene->GetLogicManager()->GetMeshMap();
+			/*std::map<std::string, void *> &mapStringToMeshes = scene->GetLogicManager()->GetMeshMap();
 			for (std::map<std::string, void *>::iterator it = mapStringToMeshes.begin(), end = mapStringToMeshes.end(); it != end; ) {
 				KX_Mesh *meshobj = (KX_Mesh *)it->second;
 				if (meshobj && IS_TAGGED(meshobj->GetMesh())) {
@@ -635,7 +634,7 @@ bool BL_Converter::FreeBlendFile(Main *maggie)
 				else {
 					++it;
 				}
-			}
+			} TODO */
 
 			// removed tagged objects and meshes
 			EXP_ListValue<KX_GameObject> *obj_lists[] = {scene->GetObjectList(), scene->GetInactiveList(), nullptr};
@@ -675,16 +674,6 @@ bool BL_Converter::FreeBlendFile(Main *maggie)
 										gameobj->RemoveMeshes(); // XXX - slack, same as above
 										break;
 									}
-								}
-							}
-						}
-
-						// make sure action actuators are not referencing tagged actions
-						for (unsigned int act_idx = 0; act_idx < gameobj->GetActuators().size(); act_idx++) {
-							if (gameobj->GetActuators()[act_idx]->IsType(SCA_IActuator::KX_ACT_ACTION)) {
-								BL_ActionActuator *act = (BL_ActionActuator *)gameobj->GetActuators()[act_idx];
-								if (IS_TAGGED(act->GetAction())) {
-									act->SetAction(nullptr);
 								}
 							}
 						}
@@ -841,7 +830,7 @@ KX_Mesh *BL_Converter::ConvertMeshSpecial(KX_Scene *kx_scene, Main *maggie, cons
 	BL_SceneConverter sceneConverter(kx_scene);
 
 	KX_Mesh *meshobj = BL_ConvertMesh((Mesh *)me, nullptr, kx_scene, sceneConverter);
-	kx_scene->GetLogicManager()->RegisterMeshName(meshobj->GetName(), meshobj);
+// 	kx_scene->GetLogicManager()->RegisterMeshName(meshobj->GetName(), meshobj); TODO
 
 	// Finalize material and mesh conversion.
 	FinalizeSceneData(sceneConverter, kx_scene);

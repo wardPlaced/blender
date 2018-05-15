@@ -73,9 +73,6 @@
 #include "SG_Node.h"
 #include "SG_BBox.h"
 
-#include "SCA_LogicManager.h"
-#include "SCA_TimeEventManager.h"
-
 #include "KX_SoftBodyDeformer.h"
 #include "KX_ClientObjectInfo.h"
 #include "KX_Scene.h"
@@ -100,18 +97,9 @@
 #include "KX_ObstacleSimulation.h"
 
 #include "BL_BlenderDataConversion.h"
-#include "BL_ModifierDeformer.h"
-#include "BL_ShapeDeformer.h"
-#include "BL_SkinDeformer.h"
-#include "BL_MeshDeformer.h"
 #include "BL_Texture.h"
 #include "BL_SceneConverter.h"
-#include "BL_ConvertActuators.h"
-#include "BL_ConvertControllers.h"
-#include "BL_ConvertSensors.h"
-#include "BL_ConvertProperties.h"
 #include "BL_ConvertObjectInfo.h"
-#include "BL_ArmatureObject.h"
 #include "BL_DeformableGameObject.h"
 
 #include "CM_Message.h"
@@ -867,7 +855,7 @@ static KX_GameObject *BL_GameObjectFromBlenderObject(Object *ob, KX_Scene *kxsce
 			KX_Mesh *meshobj = BL_ConvertMesh(mesh, ob, kxscene, converter);
 
 			// needed for python scripting
-			kxscene->GetLogicManager()->RegisterMeshName(meshobj->GetName(), meshobj);
+// 			kxscene->GetLogicManager()->RegisterMeshName(meshobj->GetName(), meshobj); TODO
 
 			if (ob->gameflag & OB_NAVMESH) {
 				gameobj = new KX_NavMeshObject(kxscene, KX_Scene::m_callbacks);
@@ -896,9 +884,9 @@ static KX_GameObject *BL_GameObjectFromBlenderObject(Object *ob, KX_Scene *kxsce
 
 		case OB_ARMATURE:
 		{
-			gameobj = new BL_ArmatureObject(kxscene, KX_Scene::m_callbacks, ob, kxscene->GetBlenderScene());
+// 			gameobj = new BL_ArmatureObject(kxscene, KX_Scene::m_callbacks, ob, kxscene->GetBlenderScene());
 
-			kxscene->AddAnimatedObject(gameobj);
+// 			kxscene->AddAnimatedObject(gameobj);
 
 			break;
 		}
@@ -1097,7 +1085,6 @@ static void bl_ConvertBlenderObject_Single(BL_SceneConverter& converter,
                                            EXP_ListValue<KX_GameObject> *objectlist, EXP_ListValue<KX_GameObject> *inactivelist,
                                            EXP_ListValue<KX_GameObject> *sumolist,
                                            KX_Scene *kxscene, KX_GameObject *gameobj,
-                                           SCA_LogicManager *logicmgr, SCA_TimeEventManager *timemgr,
                                            bool isInActiveLayer)
 {
 	const mt::vec3 pos(
@@ -1120,8 +1107,6 @@ static void bl_ConvertBlenderObject_Single(BL_SceneConverter& converter,
 	gameobj->NodeUpdateGS();
 
 	sumolist->Add(CM_AddRef(gameobj));
-
-	BL_ConvertProperties(blenderobject, gameobj, timemgr, kxscene, isInActiveLayer);
 
 	gameobj->SetName(blenderobject->id.name + 2);
 
@@ -1151,12 +1136,12 @@ static void bl_ConvertBlenderObject_Single(BL_SceneConverter& converter,
 	}
 
 	// Needed for python scripting.
-	logicmgr->RegisterGameObjectName(gameobj->GetName(), gameobj);
+// 	logicmgr->RegisterGameObjectName(gameobj->GetName(), gameobj); TODO
 
 	// Needed for group duplication.
-	logicmgr->RegisterGameObj(blenderobject, gameobj);
+// 	logicmgr->RegisterGameObj(blenderobject, gameobj); TODO
 	for (RAS_Mesh *meshobj : gameobj->GetMeshList()) {
-		logicmgr->RegisterGameMeshName(meshobj->GetName(), blenderobject);
+// 		logicmgr->RegisterGameMeshName(meshobj->GetName(), blenderobject); TODO
 	}
 
 	converter.RegisterGameObject(gameobj, blenderobject);
@@ -1195,7 +1180,6 @@ void BL_ConvertBlenderObjects(struct Main *maggie,
 	                               logicbrick_conversionlist,          \
 	                               objectlist, inactivelist, sumolist, \
 	                               kxscene, gameobj,                   \
-	                               logicmgr, timemgr,                  \
 	                               isInActiveLayer                     \
 	                               )
 
@@ -1299,15 +1283,12 @@ void BL_ConvertBlenderObjects(struct Main *maggie,
 	EXP_ListValue<KX_GameObject> *inactivelist = kxscene->GetInactiveList();
 	EXP_ListValue<KX_GameObject> *parentlist = kxscene->GetRootParentList();
 
-	SCA_LogicManager *logicmgr = kxscene->GetLogicManager();
-	SCA_TimeEventManager *timemgr = kxscene->GetTimeEventManager();
-
 	EXP_ListValue<KX_GameObject> *logicbrick_conversionlist = new EXP_ListValue<KX_GameObject>();
 
 	// Convert actions to actionmap.
 	bAction *curAct;
 	for (curAct = (bAction *)maggie->action.first; curAct; curAct = (bAction *)curAct->id.next) {
-		logicmgr->RegisterActionName(curAct->id.name + 2, curAct);
+// 		logicmgr->RegisterActionName(curAct->id.name + 2, curAct); TODO
 	}
 
 	BL_SetBlenderSceneBackground(blenderscene);
@@ -1455,13 +1436,13 @@ void BL_ConvertBlenderObjects(struct Main *maggie,
 			case PARBONE:
 			{
 				// Parent this to a bone.
-				Bone *parent_bone = BKE_armature_find_bone_name(BKE_armature_from_object(blenderchild->parent),
+				/*Bone *parent_bone = BKE_armature_find_bone_name(BKE_armature_from_object(blenderchild->parent),
 				                                                blenderchild->parsubstr);
 
 				if (parent_bone) {
 					KX_BoneParentRelation *bone_parent_relation = new KX_BoneParentRelation(parent_bone);
 					link.m_gamechildnode->SetParentRelation(bone_parent_relation);
-				}
+				}*/
 
 				break;
 			}
@@ -1499,7 +1480,7 @@ void BL_ConvertBlenderObjects(struct Main *maggie,
 		bool occlusion = false;
 		for (KX_GameObject *gameobj : sumolist) {
 			// The object can't be culled ?
-			if (gameobj->GetMeshList().empty() && gameobj->GetGameObjectType() != SCA_IObject::OBJ_TEXT) {
+			if (gameobj->GetMeshList().empty() && gameobj->GetGameObjectType() != KX_GameObject::OBJECT_TYPE_TEXT) {
 				continue;
 			}
 
@@ -1524,22 +1505,6 @@ void BL_ConvertBlenderObjects(struct Main *maggie,
 	for (KX_GameObject *gameobj : sumolist) {
 		if (gameobj->GetDeformer()) {
 			gameobj->GetDeformer()->UpdateBuckets();
-		}
-	}
-
-	// Set up armature constraints and shapekey drivers.
-	for (KX_GameObject *gameobj : sumolist) {
-		if (gameobj->GetGameObjectType() == SCA_IObject::OBJ_ARMATURE) {
-			BL_ArmatureObject *armobj = static_cast<BL_ArmatureObject *>(gameobj);
-			armobj->LoadConstraints(converter);
-
-			const std::vector<KX_GameObject *> children = armobj->GetChildren();
-			for (KX_GameObject *child : children) {
-				BL_ShapeDeformer *deformer = dynamic_cast<BL_ShapeDeformer *>(child->GetDeformer());
-				if (deformer) {
-					deformer->LoadShapeDrivers(armobj);
-				}
-			}
 		}
 	}
 
@@ -1699,35 +1664,6 @@ void BL_ConvertBlenderObjects(struct Main *maggie,
 			KX_NavMeshObject *navmesh = static_cast<KX_NavMeshObject *>(gameobj);
 			navmesh->SetVisible(false, true);
 		}
-	}
-
-	// Convert logic bricks, sensors, controllers and actuators.
-	for (KX_GameObject *gameobj : logicbrick_conversionlist) {
-		Object *blenderobj = gameobj->GetBlenderObject();
-		int layerMask = (groupobj.find(blenderobj) == groupobj.end()) ? activeLayerBitInfo : 0;
-		bool isInActiveLayer = (blenderobj->lay & layerMask) != 0;
-		BL_ConvertActuators(maggie->name, blenderobj, gameobj, logicmgr, kxscene, ketsjiEngine, layerMask, isInActiveLayer, converter);
-	}
-
-	for (KX_GameObject *gameobj : logicbrick_conversionlist) {
-		Object *blenderobj = gameobj->GetBlenderObject();
-		int layerMask = (groupobj.find(blenderobj) == groupobj.end()) ? activeLayerBitInfo : 0;
-		bool isInActiveLayer = (blenderobj->lay & layerMask) != 0;
-		BL_ConvertControllers(blenderobj, gameobj, logicmgr, layerMask, isInActiveLayer, converter, libloading);
-	}
-
-	for (KX_GameObject *gameobj : logicbrick_conversionlist) {
-		Object *blenderobj = gameobj->GetBlenderObject();
-		int layerMask = (groupobj.find(blenderobj) == groupobj.end()) ? activeLayerBitInfo : 0;
-		bool isInActiveLayer = (blenderobj->lay & layerMask) != 0;
-		BL_ConvertSensors(blenderobj, gameobj, logicmgr, kxscene, ketsjiEngine, layerMask, isInActiveLayer, canvas, converter);
-		// Set the init state to all objects.
-		gameobj->SetInitState((blenderobj->init_state) ? blenderobj->init_state : blenderobj->state);
-	}
-
-	// Apply the initial state to controllers, only on the active objects as this registers the sensors.
-	for (KX_GameObject *gameobj : objectlist) {
-		gameobj->ResetState();
 	}
 
 	// Convert the python components of each object.

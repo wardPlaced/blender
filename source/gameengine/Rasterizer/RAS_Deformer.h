@@ -43,7 +43,6 @@
 #include <map>
 
 class RAS_Mesh;
-class SCA_IObject;
 
 class RAS_Deformer
 {
@@ -53,7 +52,7 @@ public:
 
 	void InitializeDisplayArrays();
 
-	virtual void Relink(std::map<SCA_IObject *, SCA_IObject *>& map) = 0;
+// 	virtual void Relink(std::map<SCA_IObject *, SCA_IObject *>& map) = 0; TODO
 	virtual void Apply(RAS_IDisplayArray *array) = 0;
 	virtual bool Update(void)=0;
 	virtual void UpdateBuckets(void)=0;

@@ -56,7 +56,7 @@ public:
 	virtual EXP_Value *GetReplica();
 	void ProcessReplica();
 
-	virtual void Relink(std::map<SCA_IObject *, SCA_IObject *>& map);
+	virtual void Relink(std::map<KX_GameObject *, KX_GameObject *>& map);
 
 	double GetLastFrame() const;
 	void SetLastFrame(double curtime);

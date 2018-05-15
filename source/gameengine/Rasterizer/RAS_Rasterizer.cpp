@@ -396,12 +396,12 @@ void RAS_Rasterizer::DrawOverlayPlane()
 	m_impl->DrawOverlayPlane();
 }
 
-RAS_DebugDraw& RAS_Rasterizer::GetDebugDraw(SCA_IScene *scene)
+RAS_DebugDraw& RAS_Rasterizer::GetDebugDraw(void *scene)
 {
-	return m_debugDraws[scene];
+	return m_debugDraws[scene]; // TODO stores the debug drawer into KX_Scene.
 }
 
-void RAS_Rasterizer::FlushDebugDraw(SCA_IScene *scene, RAS_ICanvas *canvas)
+void RAS_Rasterizer::FlushDebugDraw(void *scene, RAS_ICanvas *canvas)
 {
 	m_debugDraws[scene].Flush(this, canvas);
 }
