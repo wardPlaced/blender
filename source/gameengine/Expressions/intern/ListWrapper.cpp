@@ -107,7 +107,7 @@ bool EXP_ListWrapper::AllowFindValue()
 
 // ================================================================
 
-std::string EXP_ListWrapper::GetName()
+std::string EXP_ListWrapper::GetName() const
 {
 	return "ListWrapper";
 }

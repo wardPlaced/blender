@@ -127,7 +127,7 @@ float RAS_IPolyMaterial::GetZOffset() const
 	return m_zoffset;
 }
 
-std::string RAS_IPolyMaterial::GetName()
+std::string RAS_IPolyMaterial::GetName() const
 {
 	return m_name;
 }

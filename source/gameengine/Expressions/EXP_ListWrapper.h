@@ -90,7 +90,7 @@ public:
 	bool AllowFindValue();
 
 	/// \section EXP_Value Inherited Functions.
-	virtual std::string GetName();
+	virtual std::string GetName() const;
 	virtual std::string GetText();
 	virtual int GetValueType();
 
