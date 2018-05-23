@@ -120,7 +120,7 @@ void BL_DeformableGameObject::LoadDeformer()
 	}
 
 #ifdef WITH_BULLET
-	const bool bHasSoftBody = (!parentobj && (blenderobj->gameflag & OB_SOFT_BODY));
+	const bool bHasSoftBody = false; //(!parentobj && (blenderobj->gameflag & OB_SOFT_BODY)); TODO BL_ConvertInfo or physics API
 
 	if (bHasSoftBody) {
 		m_deformer = new KX_SoftBodyDeformer(meshobj, this);
