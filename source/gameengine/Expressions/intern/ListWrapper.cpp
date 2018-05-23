@@ -62,7 +62,7 @@ EXP_ListWrapper::~EXP_ListWrapper()
 	}
 }
 
-bool EXP_ListWrapper::CheckValid()
+bool EXP_ListWrapper::CheckValid() const
 {
 	if (m_base && !EXP_PROXY_REF(m_base)) {
 		return false;
@@ -70,17 +70,17 @@ bool EXP_ListWrapper::CheckValid()
 	return m_checkValid ? (*m_checkValid)(m_client) : true;
 }
 
-int EXP_ListWrapper::GetSize()
+int EXP_ListWrapper::GetSize() const
 {
 	return (*m_getSize)(m_client);
 }
 
-PyObject *EXP_ListWrapper::GetItem(int index)
+PyObject *EXP_ListWrapper::GetItem(int index) const
 {
 	return (*m_getItem)(m_client, index);
 }
 
-const std::string EXP_ListWrapper::GetItemName(int index)
+const std::string EXP_ListWrapper::GetItemName(int index) const
 {
 	return (*m_getItemName)(m_client, index);
 }
@@ -90,17 +90,17 @@ bool EXP_ListWrapper::SetItem(int index, PyObject *item)
 	return (*m_setItem)(m_client, index, item);
 }
 
-bool EXP_ListWrapper::AllowSetItem()
+bool EXP_ListWrapper::AllowSetItem() const
 {
 	return m_setItem != nullptr;
 }
 
-bool EXP_ListWrapper::AllowGetItemByName()
+bool EXP_ListWrapper::AllowGetItemByName() const
 {
 	return m_getItemName != nullptr;
 }
 
-bool EXP_ListWrapper::AllowFindValue()
+bool EXP_ListWrapper::AllowFindValue() const
 {
 	return (m_flag & FLAG_FIND_VALUE);
 }
@@ -112,7 +112,7 @@ std::string EXP_ListWrapper::GetName() const
 	return "ListWrapper";
 }
 
-std::string EXP_ListWrapper::GetText()
+std::string EXP_ListWrapper::GetText() const
 {
 	std::string strListRep = "[";
 	std::string commastr = "";
@@ -125,11 +125,6 @@ std::string EXP_ListWrapper::GetText()
 	strListRep += "]";
 
 	return strListRep;
-}
-
-int EXP_ListWrapper::GetValueType()
-{
-	return -1;
 }
 
 Py_ssize_t EXP_ListWrapper::py_len(PyObject *self)

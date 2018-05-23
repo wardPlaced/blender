@@ -80,19 +80,18 @@ public:
 	~EXP_ListWrapper();
 
 	/// \section Python Interface
-	bool CheckValid();
-	int GetSize();
-	PyObject *GetItem(int index);
-	const std::string GetItemName(int index);
+	bool CheckValid() const;
+	int GetSize() const;
+	PyObject *GetItem(int index) const;
+	const std::string GetItemName(int index) const;
 	bool SetItem(int index, PyObject *item);
-	bool AllowSetItem();
-	bool AllowGetItemByName();
-	bool AllowFindValue();
+	bool AllowSetItem() const;
+	bool AllowGetItemByName() const;
+	bool AllowFindValue() const;
 
 	/// \section EXP_Value Inherited Functions.
 	virtual std::string GetName() const;
-	virtual std::string GetText();
-	virtual int GetValueType();
+	virtual std::string GetText() const;
 
 	// Python list operators.
 	static PySequenceMethods py_as_sequence;
