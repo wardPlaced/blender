@@ -72,7 +72,7 @@ public:
 
 	const std::vector<Scene *>& GetBlenderScenes() const;
 	void SetBlenderScenes(const std::vector<Scene *>& scenes);
-	const std::vector<BL_SceneConverter>& GetSceneConverters() const;
+	std::vector<BL_SceneConverter>& GetSceneConverters();
 	void AddSceneConverter(BL_SceneConverter&& converter);
 
 	bool IsFinished() const;

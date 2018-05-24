@@ -65,18 +65,20 @@ set(INC_SYS
 
 set(SRC
 	BL_BlenderDataConversion.cpp
-	BL_DeformableGameObject.cpp
 	BL_Converter.cpp
+	BL_DeformableGameObject.cpp
+	BL_IpoConvert.cpp
+	BL_ResourceCollection.cpp
 	BL_ScalarInterpolator.cpp
 	BL_SceneConverter.cpp
-	BL_IpoConvert.cpp
 
 	BL_BlenderDataConversion.h
-	BL_DeformableGameObject.h
 	BL_Converter.h
+	BL_DeformableGameObject.h
+	BL_IpoConvert.h
+	BL_ResourceCollection.h
 	BL_ScalarInterpolator.h
 	BL_SceneConverter.h
-	BL_IpoConvert.h
 )
 
 if(WITH_BULLET)

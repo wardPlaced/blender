@@ -98,7 +98,7 @@ void KX_LibLoadStatus::SetBlenderScenes(const std::vector<Scene *>& scenes)
 	m_blenderScenes = scenes;
 }
 
-const std::vector<BL_SceneConverter>& KX_LibLoadStatus::GetSceneConverters() const
+std::vector<BL_SceneConverter>& KX_LibLoadStatus::GetSceneConverters()
 {
 	return m_sceneConvertes;
 }

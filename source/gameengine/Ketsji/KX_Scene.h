@@ -38,6 +38,8 @@
 #include "KX_PythonComponentManager.h"
 #include "KX_KetsjiEngine.h" // For KX_DebugOption.
 
+#include "BL_ResourceCollection.h"
+
 #include "SG_Node.h"
 #include "SG_Frustum.h"
 
@@ -168,7 +170,7 @@ private:
 	std::string m_name;
 
 	/// Stores the world-settings for a scene.
-	KX_WorldInfo *m_worldinfo;
+	std::unique_ptr<KX_WorldInfo> m_worldinfo;
 
 	/// Network scene.
 	KX_NetworkMessageScene *m_networkScene;
@@ -195,9 +197,6 @@ private:
 	 * means don't care.
 	 */
 	std::set<KX_GameObject *> m_groupGameObjects;
-
-	/// The execution priority of replicated object actuators.
-	int m_ueberExecutionPriority;
 
 	/**
 	 * Activity 'bubble' settings :
@@ -241,6 +240,8 @@ private:
 	bool m_isActivedHysteresis;
 	int m_lodHysteresisValue;
 
+	BL_ResourceCollection m_resssources;
+
 public:
 	KX_Scene(SCA_IInputDevice *inputDevice,
 	         const std::string& scenename,
@@ -248,6 +249,9 @@ public:
 			 RAS_ICanvas *canvas,
 			 KX_NetworkMessageManager *messageManager);
 	virtual ~KX_Scene();
+
+	BL_ResourceCollection& GetResources();
+	void SetResources(BL_ResourceCollection&& ressources);
 
 	RAS_BucketManager *GetBucketManager() const;
 	KX_TextureRendererManager *GetTextureRendererManager() const;
@@ -400,7 +404,9 @@ public:
 	/// Returns the Blender scene this was made from.
 	Scene *GetBlenderScene() const;
 
-	bool MergeScene(KX_Scene *other);
+	bool Merge(KX_Scene *other);
+
+	void RemoveTagged();
 
 	/// 2D Filters.
 	KX_2DFilterManager *Get2DFilterManager() const;
