@@ -33,14 +33,13 @@
 #ifndef __KX_KETSJIENGINE_H__
 #define __KX_KETSJIENGINE_H__
 
-#include <string>
 #include "KX_ISystem.h"
 #include "KX_TimeCategoryLogger.h"
-#include "EXP_Python.h"
 #include "KX_WorldInfo.h"
 #include "RAS_CameraData.h"
 #include "RAS_Rasterizer.h"
-#include <vector>
+
+#include "EXP_ListValue.h"
 
 struct TaskScheduler;
 class KX_Scene;
@@ -52,8 +51,6 @@ class RAS_ICanvas;
 class RAS_OffScreen;
 class RAS_Query;
 class SCA_IInputDevice;
-template <class T>
-class EXP_ListValue;
 
 enum class KX_ExitRequest
 {
@@ -111,9 +108,11 @@ private:
 	struct CameraRenderData
 	{
 		CameraRenderData(KX_Camera *rendercam, KX_Camera *cullingcam, const RAS_Rect& area, const RAS_Rect& viewport,
-				RAS_Rasterizer::StereoMode stereoMode, RAS_Rasterizer::StereoEye eye);
-		CameraRenderData(const CameraRenderData& other);
+				RAS_Rasterizer::StereoMode stereoMode, RAS_Rasterizer::StereoEye eye, bool ownCamera);
 		~CameraRenderData();
+
+		CameraRenderData(CameraRenderData&& other);
+		CameraRenderData(const CameraRenderData& other) = delete;
 
 		/// Rendered camera, could be a temporary camera in case of stereo.
 		KX_Camera *m_renderCamera;
@@ -122,6 +121,7 @@ private:
 		RAS_Rect m_viewport;
 		RAS_Rasterizer::StereoMode m_stereoMode;
 		RAS_Rasterizer::StereoEye m_eye;
+		bool m_ownCamera;
 	};
 
 	struct SceneRenderData
@@ -172,9 +172,7 @@ private:
 	std::vector<std::pair<std::string, std::string> >  m_replace_scenes;
 
 	/// The current list of scenes.
-	EXP_ListValue<KX_Scene> *m_scenes;
-
-	bool m_bInitialized;
+	EXP_ListValue<KX_Scene> m_scenes;
 
 	FlagType m_flags;
 
@@ -361,7 +359,7 @@ public:
 	KX_ExitRequest GetExitCode();
 	const std::string& GetExitString();
 
-	EXP_ListValue<KX_Scene> *CurrentScenes();
+	EXP_ListValue<KX_Scene>& GetScenes();
 	KX_Scene *FindScene(const std::string& scenename);
 	void AddScene(KX_Scene *scene);
 	void ConvertAndAddScene(const std::string& scenename, bool overlay);

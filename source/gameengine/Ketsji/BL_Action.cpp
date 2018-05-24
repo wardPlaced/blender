@@ -201,13 +201,13 @@ bool BL_Action::Play(const std::string& name,
 	}
 
 	// Extra controllers
-	if (m_obj->GetGameObjectType() == KX_GameObject::OBJECT_TYPE_LIGHT) {
+	if (m_obj->GetObjectType() == KX_GameObject::OBJECT_TYPE_LIGHT) {
 		sg_contr = BL_CreateLampIPO(m_action, m_obj, kxscene);
 		m_sg_contr_list.push_back(sg_contr);
 		m_obj->GetSGNode()->AddSGController(sg_contr);
 		sg_contr->SetNode(m_obj->GetSGNode());
 	}
-	else if (m_obj->GetGameObjectType() == KX_GameObject::OBJECT_TYPE_CAMERA) {
+	else if (m_obj->GetObjectType() == KX_GameObject::OBJECT_TYPE_CAMERA) {
 		sg_contr = BL_CreateCameraIPO(m_action, m_obj, kxscene);
 		m_sg_contr_list.push_back(sg_contr);
 		m_obj->GetSGNode()->AddSGController(sg_contr);
