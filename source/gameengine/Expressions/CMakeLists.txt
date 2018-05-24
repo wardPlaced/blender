@@ -39,21 +39,21 @@ set(INC_SYS
 
 set(SRC
 	intern/BaseListValue.cpp
-	intern/BoolValue.cpp
-	intern/FloatValue.cpp
-	intern/IntValue.cpp
+	intern/PropBool.cpp
+	intern/PropFloat.cpp
+	intern/PropInt.cpp
 	intern/PyObjectPlus.cpp
-	intern/StringValue.cpp
+	intern/PropString.cpp
 	intern/Value.cpp
 	intern/ListWrapper.cpp
 
 	EXP_BaseListValue.h
-	EXP_BoolValue.h
-	EXP_FloatValue.h
-	EXP_IntValue.h
+	EXP_PropBool.h
+	EXP_PropFloat.h
+	EXP_PropInt.h
 	EXP_PyObjectPlus.h
 	EXP_Python.h
-	EXP_StringValue.h
+	EXP_PropString.h
 	EXP_Value.h
 	EXP_ListWrapper.h
 )
@@ -61,10 +61,10 @@ set(SRC
 if(WITH_PYTHON)
 	list(APPEND SRC
 		intern/PythonCallBack.cpp
-		intern/PythonValue.cpp
+		intern/PropPython.cpp
 
 		EXP_PythonCallBack.h
-		EXP_PythonValue.h
+		EXP_PropPython.h
 	)
 endif()
 
